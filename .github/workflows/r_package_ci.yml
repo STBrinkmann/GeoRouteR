@@ -49,7 +49,7 @@ jobs:
         run: |
           install.packages("remotes")
           remotes::install_deps(dependencies = TRUE)
-          remotes::install_dev("testthat")
+          install.packages("testthat")
         shell: Rscript {0}
 
       - name: Check
