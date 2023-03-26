@@ -1,18 +1,28 @@
+---
+output: github_document
+---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
 
 # GeoRouteR
 
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of GeoRouteR is to provide easy-to-use functions for routing
-and isochrone analysis on spatial data.
+The goal of GeoRouteR is to provide easy-to-use functions for routing and isochrone analysis on spatial data.
 
 ## Installation
 
-You can install the development version of GeoRouteR from
-[GitHub](https://github.com/) with:
+You can install the development version of GeoRouteR from [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("devtools")
@@ -23,7 +33,7 @@ devtools::install_github("STBrinkmann/GeoRouteR")
 
 This is a basic example which shows you how to solve a common problem:
 
-``` r
+```{r example}
 library(GeoRouteR)
 
 # Create a graph
@@ -41,11 +51,7 @@ graph <- makegraph(from, to, cost, coords = coords, crs = "epsg:4326")
 isochrones <- get_isodist(graph, from = 2, lim = 10)
 ```
 
-This code creates a graph with `makegraph()`, using edge lists for
-`from`, `to`, and `cost`, and spatial coordinates for `coords`. The
-resulting `Graph` object is used to generate isochrones with
-`get_isodist()`, specifying a starting point with `from` and a maximum
-travel distance with `lim`.
+This code creates a graph with `makegraph()`, using edge lists for `from`, `to`, and `cost`, and spatial coordinates for `coords`. The resulting `Graph` object is used to generate isochrones with `get_isodist()`, specifying a starting point with `from` and a maximum travel distance with `lim`.
 
-With GeoRouteR, users can easily perform routing and isochrone analysis
-on spatial data to better understand accessibility and travel time.
+With GeoRouteR, users can easily perform routing and isochrone analysis on spatial data to better understand accessibility and travel time.
+

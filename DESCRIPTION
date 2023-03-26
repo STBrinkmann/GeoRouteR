@@ -1,0 +1,28 @@
+Package: GeoRouteR
+Title: Routing and Isochrone Analysis for Spatial Data
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "Sebastian",
+           family = "Brinkmann",
+           role = c("aut", "cre"),
+           email = "sebastian.brinkmann@fau.de",
+           comment = c(ORCID = "0000-0001-9835-7347"))
+Description: GeoRouteR is an R package for routing and isochrone analysis
+    on spatial data. With GeoRouteR, users can easily calculate and visualize
+    routes between locations on a graph-based network, as well as generate
+    isochrone maps to visualize accessibility and travel time. The package
+    includes functions for efficient routing on large graphs, as well as
+    tools for network analysis and spatial data manipulation.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.3
+LinkingTo: 
+    Rcpp
+Imports: 
+    checkmate,
+    methods,
+    Rcpp
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
