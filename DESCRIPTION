@@ -7,7 +7,7 @@ Authors@R:
            role = c("aut", "cre"),
            email = "sebastian.brinkmann@fau.de",
            comment = c(ORCID = "0000-0001-9835-7347"))
-Description: GeoRouteR is an R package for routing and isochrone analysis
+Description: This R package provides tools for routing and isochrone analysis
     on spatial data. With GeoRouteR, users can easily calculate and visualize
     routes between locations on a graph-based network, as well as generate
     isochrone maps to visualize accessibility and travel time. The package
