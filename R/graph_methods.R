@@ -1,4 +1,15 @@
-#' @description Graph Constructor Method
+#' Initialize a Graph object
+#'
+#' @description Initializes a new Graph object with the specified data, coordinates, dictionary, directionality, and coordinate reference system (CRS).
+#'
+#' @param .Object An object of class "Graph".
+#' @param data A data frame or matrix representing the edges of the graph.
+#' @param coords A data frame or matrix representing the coordinates of the nodes in the graph.
+#' @param dict A named character vector mapping node names to IDs.
+#' @param directed A logical value indicating whether the graph is directed (default: TRUE).
+#' @param crs A character string representing the coordinate reference system (CRS) of the graph (default: NA_character_).
+#' 
+#' @return An object of class "Graph".
 #' @rdname Graph
 #' @importFrom methods setMethod
 #'

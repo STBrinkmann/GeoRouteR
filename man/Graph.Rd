@@ -9,10 +9,31 @@
 \usage{
 \S4method{initialize}{Graph}(.Object, data, coords, dict, directed = TRUE, crs = NA_character_)
 }
+\arguments{
+\item{.Object}{An object of class "Graph".}
+
+\item{data}{A data frame or matrix representing the edges of the graph.}
+
+\item{coords}{A data frame or matrix representing the coordinates of the nodes in the graph.}
+
+\item{dict}{A named character vector mapping node names to IDs.}
+
+\item{directed}{A logical value indicating whether the graph is directed (default: TRUE).}
+
+\item{crs}{A character string representing the coordinate reference system (CRS) of the graph (default: NA_character_).}
+}
+\value{
+An object of class "Graph".
+}
 \description{
 This class represents a graph with nodes, edges, and costs.
 
-Graph Constructor Method
+Initializes a new Graph object with the specified data, coordinates, dictionary, directionality, and coordinate reference system (CRS).
+}
+\details{
+Graph Class
+
+This class represents a graph with nodes, edges, and costs.
 }
 \section{Slots}{
 
@@ -22,6 +43,36 @@ Graph Constructor Method
 \item{\code{coords}}{A data.frame containing the coordinates for each node (optional).}
 
 \item{\code{dict}}{A data.frame mapping the node reference to its integer ID.}
+
+\item{\code{directed}}{A logical value indicating whether the graph is directed (default: TRUE).}
+
+\item{\code{crs}}{A character string representing the coordinate reference system (CRS) of the graph (default: NA_character_).}
 }}
 
+\section{Slots}{
+
+\describe{
+\item{\code{data}:}{A data.frame containing the graph edges and costs.}
+\item{\code{coords}:}{A data.frame containing the coordinates for each node (optional).}
+\item{\code{dict}:}{A data.frame mapping the node reference to its integer ID.}
+\item{\code{directed}:}{A logical value indicating whether the graph is directed (default: TRUE).}
+\item{\code{crs}:}{A character string representing the coordinate reference system (CRS) of the graph (default: NA_character_).}
+}
+}
+
+\examples{
+# Create a new Graph object
+g <- new("Graph", data = my_data, coords = my_coords, dict = my_dict)
+
+# Access the slots of the Graph object
+g@data
+g@coords
+g@dict
+g@directed
+g@crs
+
+}
+\seealso{
+\code{\link{initialize}}
+}
 \keyword{classes}
