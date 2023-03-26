@@ -20,7 +20,7 @@ GraphIsochrone::GraphIsochrone(const std::vector<int>& from, const std::vector<i
   
   adjacencyList.resize(maxNode + 1);
   
-  for (size_t i = 0; i < from.size(); i++) {
+  for (std::size_t i = 0; i < from.size(); i++) {
     adjacencyList[from[i]].push_back({to[i], cost[i]});
   }
 }
