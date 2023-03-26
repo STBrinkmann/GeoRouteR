@@ -29,6 +29,7 @@
 #' @importFrom checkmate assert_multi_class
 #' @importFrom checkmate assert_class
 #' @importFrom checkmate assert_set_equal
+#' @importFrom methods new
 
 makegraph <- function(from, to, cost, directed = TRUE, coords = NULL, crs = NA_character_) {
   # Check input consistency
@@ -97,7 +98,7 @@ makegraph <- function(from, to, cost, directed = TRUE, coords = NULL, crs = NA_c
   }
 
   # Return the graph object as a list
-  return(new("Graph", data = df, coords = coords, dict = dict, directed = directed, crs = crs))
+  return(methods::new("Graph", data = df, coords = coords, dict = dict, directed = directed, crs = crs))
 }
 
 
@@ -106,7 +107,7 @@ makegraph <- function(from, to, cost, directed = TRUE, coords = NULL, crs = NA_c
 #' @description This function calculates the isochrone for a set of starting nodes in a directed
 #' graph using Dijkstra's algorithm. The isochrone is defined as the set of nodes that can be
 #' reached from the starting nodes within a certain cost limit.
-#' @param graph A Graph object.
+#' @param Graph A Graph object.
 #' @param from A vector of node IDs representing the starting node(s).
 #' @param lim A numeric value or vector of values representing the maximum cost(s) of the isochrone.
 #' @param cores The number of CPU cores to use for parallel computation (if available).
