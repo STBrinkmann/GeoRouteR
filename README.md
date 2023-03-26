@@ -4,6 +4,8 @@
 # GeoRouteR
 
 <!-- badges: start -->
+
+[![R-CMD-check](https://github.com/STBrinkmann/GeoRouteR/actions/workflows/check-standard.yaml/badge.svg)](https://github.com/STBrinkmann/GeoRouteR/actions/workflows/check-standard.yaml)
 <!-- badges: end -->
 
 The goal of GeoRouteR is to provide easy-to-use functions for routing
