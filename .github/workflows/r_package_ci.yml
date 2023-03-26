@@ -50,6 +50,7 @@ jobs:
           install.packages("remotes")
           remotes::install_deps(dependencies = TRUE)
           install.packages("testthat")
+          install.packages("rcmdcheck")
         shell: Rscript {0}
 
       - name: Check
