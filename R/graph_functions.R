@@ -110,7 +110,6 @@ makegraph <- function(from, to, cost, directed = TRUE, coords = NULL, crs = NA_c
 #' @param Graph A Graph object.
 #' @param from A vector of node IDs representing the starting node(s).
 #' @param lim A numeric value or vector of values representing the maximum cost(s) of the isochrone.
-#' @param cores The number of CPU cores to use for parallel computation (if available).
 #' @return a data frame with three columns: "start_node" (the starting node), "node"
 #' (a node in the isochrone), and "cost" (the cost of the path from the starting node to the node)
 #' @examples
@@ -127,7 +126,7 @@ makegraph <- function(from, to, cost, directed = TRUE, coords = NULL, crs = NA_c
 #' }
 #' @export
 #'
-get_isodist <- function(Graph, from, lim, cores = 1L) {
+get_isodist <- function(Graph, from, lim) {
   # Check input consistency
   checkmate::assert_class(Graph, "Graph")
   if (any(is.na(from))) stop("NAs are not allowed in origin nodes")
@@ -144,8 +143,7 @@ get_isodist <- function(Graph, from, lim, cores = 1L) {
                                 to = Graph@data$to,
                                 cost = Graph@data$cost,
                                 start_nodes = from_id,
-                                lim = lim,
-                                num_cores = cores)
+                                lim = lim)
 
   # Add ref
   res <- merge(res, Graph@dict, by.x = "node", by.y = "id")
@@ -155,7 +153,7 @@ get_isodist <- function(Graph, from, lim, cores = 1L) {
                     to = res$node,
                     ref = res$ref,
                     cost = res$cost,
-                    threshold = res$threshold)
+                    threshold = as.character(res$threshold))
 
   # Order the result by 'from', 'cost', and 'to'
   res <- res[with(res, order(from, cost, to)), ]

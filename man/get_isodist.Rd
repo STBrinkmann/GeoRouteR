@@ -4,7 +4,7 @@
 \alias{get_isodist}
 \title{Calculate isochrone using Dijkstra's algorithm}
 \usage{
-get_isodist(Graph, from, lim, cores = 1L)
+get_isodist(Graph, from, lim)
 }
 \arguments{
 \item{Graph}{A Graph object.}
@@ -12,8 +12,6 @@ get_isodist(Graph, from, lim, cores = 1L)
 \item{from}{A vector of node IDs representing the starting node(s).}
 
 \item{lim}{A numeric value or vector of values representing the maximum cost(s) of the isochrone.}
-
-\item{cores}{The number of CPU cores to use for parallel computation (if available).}
 }
 \value{
 a data frame with three columns: "start_node" (the starting node), "node"

@@ -8,7 +8,7 @@ class GraphIsochrone {
 public:
   GraphIsochrone(const std::vector<int>& from, const std::vector<int>& to, const std::vector<double>& cost);
 
-  std::vector<std::tuple<int, int, double>> calculateIsochrone(const std::vector<int>& start_nodes, double lim, int num_cores) const;
+  std::vector<std::tuple<int, int, double>> calculateIsochrone(const std::vector<int>& start_nodes, double lim) const;
 
 private:
   struct Edge {

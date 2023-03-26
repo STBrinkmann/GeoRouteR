@@ -17,7 +17,7 @@ double assign_thresholds(const double& cost, const NumericVector& lim) {
 }
 
 // [[Rcpp::export]]
-DataFrame calculateIsochroneRcpp(IntegerVector from, IntegerVector to, NumericVector cost, NumericVector start_nodes, NumericVector lim, int num_cores) {
+DataFrame calculateIsochroneRcpp(IntegerVector from, IntegerVector to, NumericVector cost, NumericVector start_nodes, NumericVector lim) {
 
   // Convert Rcpp vectors to std::vectors
   std::vector<int> from_vec(from.begin(), from.end());
@@ -30,7 +30,7 @@ DataFrame calculateIsochroneRcpp(IntegerVector from, IntegerVector to, NumericVe
 
   // Call the calculateIsochrone function for the maximum lim
   double lim_max = *std::max_element(lim.begin(), lim.end());
-  std::vector<std::tuple<int, int, double>> isochrone = graphIsochrone.calculateIsochrone(start_nodes_vec, lim_max, num_cores);
+  std::vector<std::tuple<int, int, double>> isochrone = graphIsochrone.calculateIsochrone(start_nodes_vec, lim_max);
 
   // Convert the result to Rcpp vectors
   NumericVector start_nodes_out(isochrone.size());
