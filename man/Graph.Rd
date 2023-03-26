@@ -61,6 +61,7 @@ This class represents a graph with nodes, edges, and costs.
 }
 
 \examples{
+\dontrun{
 # Create a new Graph object
 g <- new("Graph", data = my_data, coords = my_coords, dict = my_dict)
 
@@ -70,6 +71,7 @@ g@coords
 g@dict
 g@directed
 g@crs
+}
 
 }
 \seealso{

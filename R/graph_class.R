@@ -28,6 +28,7 @@
 #' }
 #' 
 #' @examples
+#' \dontrun{
 #' # Create a new Graph object
 #' g <- new("Graph", data = my_data, coords = my_coords, dict = my_dict)
 #' 
@@ -37,6 +38,7 @@
 #' g@dict
 #' g@directed
 #' g@crs
+#' }
 #' 
 #' @seealso \code{\link{initialize}}
 #' @keywords classes
