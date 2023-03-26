@@ -11,7 +11,7 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
 // calculateIsochroneRcpp
-DataFrame calculateIsochroneRcpp(IntegerVector from, IntegerVector to, NumericVector cost, NumericVector start_nodes, NumericVector lim);
+DataFrame calculateIsochroneRcpp(IntegerVector from, IntegerVector to, NumericVector cost, NumericVector start_nodes, CharacterVector lim);
 RcppExport SEXP _GeoRouteR_calculateIsochroneRcpp(SEXP fromSEXP, SEXP toSEXP, SEXP costSEXP, SEXP start_nodesSEXP, SEXP limSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -20,7 +20,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< IntegerVector >::type to(toSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type cost(costSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type start_nodes(start_nodesSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type lim(limSEXP);
+    Rcpp::traits::input_parameter< CharacterVector >::type lim(limSEXP);
     rcpp_result_gen = Rcpp::wrap(calculateIsochroneRcpp(from, to, cost, start_nodes, lim));
     return rcpp_result_gen;
 END_RCPP

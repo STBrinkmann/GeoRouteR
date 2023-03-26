@@ -29,8 +29,7 @@ std::vector<std::tuple<int, int, double>> GraphIsochrone::calculateIsochrone(con
   std::vector<std::tuple<int, int, double>> result;
   std::set<std::pair<int, int>> visitedEdges;
   
-  for (int i = 0; i < start_nodes.size(); i++) {
-    int start = start_nodes[i];
+  for (auto start : start_nodes) {
     std::vector<double> costs(adjacencyList.size(), std::numeric_limits<double>::max());
     costs[start] = 0.0;
     
@@ -68,4 +67,5 @@ std::vector<std::tuple<int, int, double>> GraphIsochrone::calculateIsochrone(con
   
   return result;
 }
+
 
