@@ -1,163 +1,84 @@
-#' Make a Graph
+#' Create a Graph object
 #'
-#' @description Create a graph object from edge data.
-#' @param from Vector of node IDs representing the start of an edge.
-#' @param to Vector of node IDs representing the end of an edge.
-#' @param cost Vector of edge costs.
-#' @param directed Logical indicating whether the graph is directed or not.
-#' @param coords An optional data.frame containing the node coordinates.
-#' @param crs A character string specifying the coordinate reference system (CRS) of the coordinates
+#' This function takes edge and node data.frames and a CRS string to create a Graph object.
+#'
+#' @param edges data.frame with columns "from", "to", "cost", and optionally "dist".
+#' @param nodes data.frame with columns "node", "X", and "Y".
+#' @param crs character string representing the coordinate reference system.
+#' @param directed logical value indicating whether the graph is directed (default is TRUE).
+#'
 #' @return A Graph object.
+#' @export
+#'
 #' @examples
 #' \dontrun{
-#' # Create a graph
-#' from  <- c(1, 1, 1, 2, 2, 3, 3, 4, 5, 6, 6, 7)
-#' to    <- c(2, 3, 4, 3, 5, 4, 6, 6, 7, 5, 7, 8)
-#' cost  <- c(5.6, 3.8, 2.0, 1.2, 6.1, 4.2, 2.5, 7.8, 3.3, 1.7, 6.9, 2.2)
-#' 
-#' graph <- makegraph(from, to, cost)
-#' 
-#' coords <- data.frame(
-#' id = graph@dict$ref,
-#' lon = c(-73.987, -73.988, -73.986, -73.989, -73.984, -73.985, -73.990, -73.983),
-#' lat = c(40.753, 40.754, 40.755, 40.756, 40.757, 40.752, 40.758, 40.751)
-#' )
-#' graph2 <- makegraph(from, to, cost, coords = coords, crs = "epsg:4326")
-#' 
+#' edges <- data.frame(from = c("A", "A", "B", "C"),
+#'                     to = c("B", "C", "C", "D"),
+#'                     cost = c(1, 2, 3, 4),
+#'                     dist = c(1, 2, 2, 1))
+#'
+#' nodes <- data.frame(node = c("A", "B", "C", "D"),
+#'                     X = c(0, 1, 1, 2),
+#'                     Y = c(0, 0, 1, 1))
+#'
+#' crs <- "EPSG:4326"
+#'
+#' graph <- makegraph(edges, nodes, crs, directed = TRUE)
+#' print(graph)
 #' }
-#' @export
-#' @importFrom checkmate assert_multi_class
-#' @importFrom checkmate assert_class
-#' @importFrom checkmate assert_set_equal
+#' 
+#' @importFrom checkmate assert_data_frame
+#' @importFrom checkmate assert_string
+#' @importFrom checkmate assert_logical
 #' @importFrom methods new
-
-makegraph <- function(from, to, cost, directed = TRUE, coords = NULL, crs = NA_character_) {
-  # Check input consistency
-  if (!(length(from) == length(to) && length(from) == length(cost))) {
-    stop("from, to, and cost must have the same length")
+makegraph <- function(edges, nodes, crs, directed = TRUE) {
+  # Input validation tests using checkmate
+  checkmate::assert_data_frame(edges, min.cols = 3, max.cols = 4)
+  checkmate::assert_data_frame(nodes, min.cols = 3)
+  checkmate::assert_string(crs)
+  checkmate::assert_logical(directed, len = 1)
+  
+  # Check if the edges data.frame has 3 or 4 columns
+  if (ncol(edges) == 3) {
+    edges$dist <- 0
   }
-
-  checkmate::assert_multi_class(from, c("integer", "numeric", "character"))
-  checkmate::assert_multi_class(to, c("integer", "numeric", "character"))
-  checkmate::assert_multi_class(cost, c("integer", "numeric"))
-
-  # Create graph data.frame
-  df <- data.frame(
-    from = as.integer(from),
-    to = as.integer(to),
-    cost = as.numeric(cost)
-  )
-
-  if (any(is.na(df))) stop("NAs are not allowed in the graph")
-  if (any(df$cost < 0)) stop("Negative costs are not allowed")
-
+  
+  # Check if column names of edges and nodes data.frames are as expected
+  checkmate::assert_named(edges, .var.name = c("from", "to", "cost", "dist"))
+  checkmate::assert_named(nodes, .var.name = c("node", "X", "Y"))
+  
+  if (any(is.na(edges))) stop("NAs are not allowed in the graph")
+  if (any(edges$cost < 0)) stop("Negative costs are not allowed")
+  if (any(!unique(c(edges$from, edges$to)) %in% unique(nodes$node))) {
+    stop("Some nodes from edges are not represented in the nodes data.table")
+  }
+  nodes <- nodes[nodes$node %in% unique(c(edges$from, edges$to)),]
+  
   # Add reverse edges if the graph is undirected
   if (!directed) {
-    df2 <- df[, c(2, 1, 3)]
-    colnames(df2) <- colnames(df)
-    df <- rbind(df, df2)
+    edges2 <- edges[, c("to", "from", "cost", "dist")]
+    colnames(edges2) <- colnames(edges)
+    edges <- rbind(edges, edges2)
   }
-
-  # Validate and preprocess coordinates (if provided)
-  if (!is.null(coords)) {
-    if (ncol(coords) != 3) stop("coords should have 3 columns")
-
-    checkmate::assert_multi_class(coords[[1]], c("integer", "numeric", "character"))
-    checkmate::assert_multi_class(coords[[2]], c("integer", "numeric"))
-    checkmate::assert_multi_class(coords[[3]], c("integer", "numeric"))
-
-    coords[[1]] <- as.character(coords[[1]])
-    coords[[2]] <- as.numeric(coords[[2]])
-    coords[[3]] <- as.numeric(coords[[3]])
-    colnames(coords) <- c("id", "X", "Y")
-
-    if (any(is.na(coords))) stop("NAs are not allowed in coordinates")
-    if (sum(duplicated(coords[[1]])) > 0) stop("node_ID should be unique in the coordinates data frame")
-
-    nodes <- unique(c(df$from, df$to))
-    if (sum(nodes %in% coords[[1]]) < length(nodes)) stop("Some nodes are missing in coordinates data")
-
-    coords <- coords[coords[[1]] %in% nodes,]
-  } else {
-    coords <- data.frame(NULL)
-  }
-
-  # Create a dictionary to map node references to unique IDs
-  nodes <- unique(c(df$from, df$to))
-  dict <- data.frame(ref = nodes,
-                     id = 0:(length(nodes) - 1),
-                     stringsAsFactors = FALSE)
-
-  # Replace node references with unique IDs in the graph data.frame
-  df$from <- dict$id[match(df$from, dict$ref)]
-  df$to <- dict$id[match(df$to, dict$ref)]
-  dict$ref <- as.character(dict$ref)
-
-  if (nrow(coords) > 0) {
-    coords <- coords[match(nodes, coords[[1]]),]
-  }
-
-  # Return the graph object as a list
-  return(methods::new("Graph", data = df, coords = coords, dict = dict, directed = directed, crs = crs))
-}
-
-
-#' Calculate isochrone using Dijkstra's algorithm
-#'
-#' @description This function calculates the isochrone for a set of starting nodes in a directed
-#' graph using Dijkstra's algorithm. The isochrone is defined as the set of nodes that can be
-#' reached from the starting nodes within a certain cost limit.
-#' @param Graph A Graph object.
-#' @param from A vector of node IDs representing the starting node(s).
-#' @param lim A numeric value or vector of values representing the maximum cost(s) of the isochrone.
-#' @return a data frame with three columns: "start_node" (the starting node), "node"
-#' (a node in the isochrone), and "cost" (the cost of the path from the starting node to the node)
-#' @examples
-#' \dontrun{
-#' # Create a graph
-#' from <- c(1, 1, 1, 2, 2, 3, 3, 4, 5, 6, 6, 7)
-#' to <- c(2, 3, 4, 3, 5, 4, 6, 6, 7, 5, 7, 8)
-#' cost <- c(5.6, 3.8, 2.0, 1.2, 6.1, 4.2, 2.5, 7.8, 3.3, 1.7, 6.9, 2.2)
-#'
-#' graph <- makegraph(from, to, cost, directed = TRUE, coords = NULL)
-#'
-#' # Calculate isochrones for a graph object
-#' isochrones <- get_isodist(graph, from = 2, lim = 10)
-#' }
-#' @export
-#'
-get_isodist <- function(Graph, from, lim) {
-  # Check input consistency
-  checkmate::assert_class(Graph, "Graph")
-  if (any(is.na(from))) stop("NAs are not allowed in origin nodes")
-
-  from <- as.character(from)
-  if (sum(from %in% Graph@dict$ref) < length(from)) stop("Some nodes are not in the graph")
-  from_id <- Graph@dict$id[match(from, Graph@dict$ref)]
-
-  lim <- as.numeric(lim)
-  if (any(is.na(lim))) stop("NAs are not allowed in cost value(s)")
-
-  # Calculate isochrones using C++ function (Dijkstra)
-  res <- calculateIsochroneRcpp(from = Graph@data$from,
-                                to = Graph@data$to,
-                                cost = Graph@data$cost,
-                                start_nodes = from_id,
-                                lim = lim)
-
-  # Add ref
-  res <- merge(res, Graph@dict, by.x = "node", by.y = "id")
-
-  # Reorder and rename
-  res <- data.frame(from = res$start_node,
-                    to = res$node,
-                    ref = res$ref,
-                    cost = res$cost,
-                    threshold = as.character(res$threshold))
-
-  # Order the result by 'from', 'cost', and 'to'
-  res <- res[with(res, order(from, cost, to)), ]
-  rownames(res) <- NULL
-
-  return(res)
+  
+  # Extract the required columns from the input data.frames
+  edge_from <- edges$from
+  edge_to <- edges$to
+  edge_cost <- edges$cost
+  edge_dist <- edges$dist
+  
+  node_name <- nodes$node
+  node_x <- nodes$X
+  node_y <- nodes$Y
+  
+  # Initialize a new Graph object
+  graph <- Graph$new(edge_from = edge_from, 
+                     edge_to = edge_to, 
+                     edge_cost = edge_cost, 
+                     edge_dist = edge_dist, 
+                     node_name = node_name, 
+                     node_x = node_x, 
+                     node_y = node_y, 
+                     crs = crs)
+  return(graph)
 }

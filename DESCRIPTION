@@ -18,11 +18,15 @@ Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
 LinkingTo: 
-    Rcpp
+    Rcpp,
+    RcppParallel
 Imports: 
     checkmate,
     methods,
-    Rcpp
+    R6,
+    Rcpp,
+    RcppParallel
 Suggests: 
     testthat (>= 3.0.0)
+SystemRequirements: GNU make
 Config/testthat/edition: 3

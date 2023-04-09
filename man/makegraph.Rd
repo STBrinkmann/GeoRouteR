@@ -2,44 +2,40 @@
 % Please edit documentation in R/graph_functions.R
 \name{makegraph}
 \alias{makegraph}
-\title{Make a Graph}
+\title{Create a Graph object}
 \usage{
-makegraph(from, to, cost, directed = TRUE, coords = NULL, crs = NA_character_)
+makegraph(edges, nodes, crs, directed = TRUE)
 }
 \arguments{
-\item{from}{Vector of node IDs representing the start of an edge.}
+\item{edges}{data.frame with columns "from", "to", "cost", and optionally "dist".}
 
-\item{to}{Vector of node IDs representing the end of an edge.}
+\item{nodes}{data.frame with columns "node", "X", and "Y".}
 
-\item{cost}{Vector of edge costs.}
+\item{crs}{character string representing the coordinate reference system.}
 
-\item{directed}{Logical indicating whether the graph is directed or not.}
-
-\item{coords}{An optional data.frame containing the node coordinates.}
-
-\item{crs}{A character string specifying the coordinate reference system (CRS) of the coordinates}
+\item{directed}{logical value indicating whether the graph is directed (default is TRUE).}
 }
 \value{
 A Graph object.
 }
 \description{
-Create a graph object from edge data.
+This function takes edge and node data.frames and a CRS string to create a Graph object.
 }
 \examples{
 \dontrun{
-# Create a graph
-from  <- c(1, 1, 1, 2, 2, 3, 3, 4, 5, 6, 6, 7)
-to    <- c(2, 3, 4, 3, 5, 4, 6, 6, 7, 5, 7, 8)
-cost  <- c(5.6, 3.8, 2.0, 1.2, 6.1, 4.2, 2.5, 7.8, 3.3, 1.7, 6.9, 2.2)
+edges <- data.frame(from = c("A", "A", "B", "C"),
+                    to = c("B", "C", "C", "D"),
+                    cost = c(1, 2, 3, 4),
+                    dist = c(1, 2, 2, 1))
 
-graph <- makegraph(from, to, cost)
+nodes <- data.frame(node = c("A", "B", "C", "D"),
+                    X = c(0, 1, 1, 2),
+                    Y = c(0, 0, 1, 1))
 
-coords <- data.frame(
-id = graph@dict$ref,
-lon = c(-73.987, -73.988, -73.986, -73.989, -73.984, -73.985, -73.990, -73.983),
-lat = c(40.753, 40.754, 40.755, 40.756, 40.757, 40.752, 40.758, 40.751)
-)
-graph2 <- makegraph(from, to, cost, coords = coords, crs = "epsg:4326")
+crs <- "EPSG:4326"
 
+graph <- makegraph(edges, nodes, crs, directed = TRUE)
+print(graph)
 }
+
 }
