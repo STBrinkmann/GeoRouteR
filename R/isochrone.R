@@ -41,9 +41,9 @@ isochrone <- function(Graph, from, lim) {
   if (any(is.na(lim))) stop("NAs are not allowed in cost value(s)")
   
   # Calculate isochrones using C++ function (Dijkstra)
-  res <- testGeoRouteR:::calculate_isochrone(graph_ptr = Graph$pointer,
-                                             start_nodes_sexp = from_id,
-                                             lim_sexp = lim)
+  res <- calculate_isochrone(graph_ptr = Graph$pointer,
+                             start_nodes_sexp = from_id,
+                             lim_sexp = lim)
   
   # Order the result by 'start', 'cost', and 'end'
   res <- res[with(res, order(start, cost, end)), ]
