@@ -23,31 +23,42 @@ devtools::install_github("STBrinkmann/GeoRouteR")
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
+This is a basic example which shows you how to build a basic Graph:
 
 ``` r
 library(GeoRouteR)
 
-# Create a graph
-from <- c(1, 1, 1, 2, 2, 3, 3, 4, 5, 6, 6, 7)
-to <- c(2, 3, 4, 3, 5, 4, 6, 6, 7, 5, 7, 8)
-cost <- c(5.6, 3.8, 2.0, 1.2, 6.1, 4.2, 2.5, 7.8, 3.3, 1.7, 6.9, 2.2)
-coords <- data.frame(
-  id = 1:8,
-  lon = c(-73.987, -73.988, -73.986, -73.989, -73.984, -73.985, -73.990, -73.983),
-  lat = c(40.753, 40.754, 40.755, 40.756, 40.757, 40.752, 40.758, 40.751)
-)
-graph <- makegraph(from, to, cost, coords = coords, crs = "epsg:4326")
+edges <- data.frame(from = c("A", "A", "B", "C"),
+                    to = c("B", "C", "C", "D"),
+                    cost = c(1, 2, 3, 4))
 
-# Generate isochrones
-isochrones <- get_isodist(graph, from = 2, lim = 10)
+nodes <- data.frame(node = c("A", "B", "C", "D"),
+                    X = c(0, 1, 1, 2),
+                    Y = c(0, 0, 1, 1))
+
+crs <- "EPSG:4326"
+
+graph <- makegraph(edges, nodes, crs, directed = TRUE)
+graph
+#> Graph summary:
+#> -----------------
+#> Number of nodes: 4 
+#> Number of edges: 4 
+#> CRS: EPSG:4326
 ```
 
-This code creates a graph with `makegraph()`, using edge lists for
-`from`, `to`, and `cost`, and spatial coordinates for `coords`. The
-resulting `Graph` object is used to generate isochrones with
-`get_isodist()`, specifying a starting point with `from` and a maximum
-travel distance with `lim`.
+This code creates a graph with `makegraph()`, using the edge
+`data.frame` for `from`, `to`, and `cost`, and spatial coordinates from
+the `nodes` `data.frame` containing the `node`, `X` and `Y` coordinates.
+The resulting `Graph` object is stored in C++ and a pointer is used for
+calling the relevant methods. We can now use use the `isochrone`
+function to generate isochrones.
 
-With GeoRouteR, users can easily perform routing and isochrone analysis
-on spatial data to better understand accessibility and travel time.
+``` r
+isochrones <- isochrone(graph, from = "A", lim = c(2, 6))
+isochrones
+#>   from to cost threshold
+#> 1    A  B    1         2
+#> 2    A  C    2         2
+#> 3    A  D    6         6
+```
