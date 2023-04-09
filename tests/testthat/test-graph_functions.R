@@ -17,7 +17,7 @@ test_that("makegraph works", {
                          sort(graph$node_dict()$key))
 })
 
-test_that("get_isodist works", {
+test_that("isochrone works", {
   edges <- data.frame(from = c("A", "A", "B", "C"),
                       to = c("B", "C", "C", "D"),
                       cost = c(1, 2, 3, 4),
