@@ -39,7 +39,7 @@ Graph::Graph(const std::vector<std::string>& edge_from,
     int to = to_it->second.first;
     double speed = edge_speed[i];
     double length = edge_length[i];
-    double cost = (length / 1000.0) / (speed / 3600.0);
+    double cost = (length / 1000.0) / (speed / 3600.0) / 60;
     std::string oneway = edge_oneway[i];
     
     Edge edge = {from, to, cost, speed, length, oneway};
@@ -105,7 +105,7 @@ void Graph::activate_routing_profile(int profile) {
       }
       
       // Update the cost based on the new speed
-      edge.cost = (edge.length / 1000.0) / (edge.speed / 3600.0);
+      edge.cost = (edge.length / 1000.0) / (edge.speed / 3600.0) / 60;
       
       // Adjust for the oneway parameter
       if (edge.oneway == "TF") {
