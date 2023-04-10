@@ -48,13 +48,14 @@ public:
   
   // Methods
   void activate_routing_profile(int profile);
-
+  
 private:
   // Member variables
   std::vector<Edge> edges_;
   std::vector<Edge> original_edges_;
   std::vector<Node> nodes_;
   std::vector<Node> original_nodes_;
+  std::unordered_map<std::string, int> original_node_dict_;
   std::unordered_map<std::string, int> node_dict_;
   std::string crs_;
   std::string active_profile_;
@@ -62,7 +63,7 @@ private:
   // Helper methods
   void reset_edges();
   void reset_nodes();
-  void findNodeById();
+  void reset_node_dict();
 };
 
 #endif //GRAPH_H

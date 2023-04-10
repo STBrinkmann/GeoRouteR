@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <stdexcept>
 #include <map>
+#include <unordered_set>
 
 // Constructor
 Graph::Graph(const std::vector<std::string>& edge_from,
@@ -57,6 +58,7 @@ Graph::Graph(const std::vector<std::string>& edge_from,
   for (const auto& entry : tmp_node_dict) {
     if (entry.second.second) {
       node_dict_[entry.first] = entry.second.first;
+      original_node_dict_[entry.first] = entry.second.first;
       Node node = {entry.second.first, node_x[entry.second.first], node_y[entry.second.first]};
       nodes_.emplace_back(node);
       original_nodes_.emplace_back(node);
@@ -67,19 +69,41 @@ Graph::Graph(const std::vector<std::string>& edge_from,
 }
 
 
+// Getters
+const std::vector<Graph::Edge>& Graph::edges() const {
+  return edges_;
+}
+
+const std::vector<Graph::Node>& Graph::nodes() const {
+  return nodes_;
+}
+
+const std::unordered_map<std::string, int>& Graph::node_dict() const {
+  return node_dict_;
+}
+
+std::string Graph::crs() const {
+  return crs_;
+}
+
+std::string Graph::active_profile() const {
+  return active_profile_;
+}
+
+
 // Methods
 void Graph::activate_routing_profile(int profile) {
   reset_edges(); // Reset edges to the original data
   reset_nodes(); // Reset nodes to the original data
+  reset_node_dict();  // Reset node_dict to the original data
   
   if(profile == ROUTING_PROFILE_DEFAULT) {
     active_profile_ = "default";
   } else {
     std::vector<Edge> updated_edges;
-    updated_edges.reserve(edges_.size());
-    
     std::vector<Node> updated_nodes;
-    updated_nodes.reserve(nodes_.size());
+    std::unordered_map<std::string, int> updated_node_dict;
+    std::unordered_set<int> updated_node_ids;
     
     for (Edge& edge : edges_) {
       bool add_edge = true;
@@ -94,7 +118,7 @@ void Graph::activate_routing_profile(int profile) {
       case ROUTING_PROFILE_BICYCLE:
         active_profile_ = "bicycle";
         edge.oneway = (edge.speed > 90) ? "N" : edge.oneway;
-        edge.speed = (edge.oneway == "foot_only") ? 4 : 15; // default 15 km/h, 4 km/h when walking is required 
+        edge.speed = (edge.oneway == "foot_only") ? 4 : 15; // default 15 km/h; 4 km/h when walking is required
         break;
       case ROUTING_PROFILE_CAR:
         active_profile_ = "car";
@@ -117,44 +141,57 @@ void Graph::activate_routing_profile(int profile) {
       }
       
       if (add_edge) {
-        updated_edges.emplace_back(edge);
+        updated_edges.push_back(edge);
+        updated_node_ids.insert(edge.from);
+        updated_node_ids.insert(edge.to);
         
-        // Add the node that has edge.from as node.id if not already in updated_nodes
-        auto from_node = std::find_if(nodes_.begin(), nodes_.end(), [&edge](const Node& n) {
-          return n.id == edge.from;
-        });
-        if (from_node != nodes_.end()) {
-          if (std::find_if(updated_nodes.begin(), updated_nodes.end(), [&edge](const Node& n) {
-            return n.id == edge.from;
-          }) == updated_nodes.end()) {
-            updated_nodes.emplace_back(*from_node);
-          }
+        if (add_reverse_edge) {
+          Edge reverse_edge = edge;
+          std::swap(reverse_edge.from, reverse_edge.to);
+          updated_edges.push_back(reverse_edge);
         }
-        
-        // Add the node that has edge.to as node.id if not already in updated_nodes
-        auto to_node = std::find_if(nodes_.begin(), nodes_.end(), [&edge](const Node& n) {
-          return n.id == edge.to;
-        });
-        if (to_node != nodes_.end()) {
-          if (std::find_if(updated_nodes.begin(), updated_nodes.end(), [&edge](const Node& n) {
-            return n.id == edge.to;
-          }) == updated_nodes.end()) {
-            updated_nodes.emplace_back(*to_node);
-          }
-        }
-      }
-      
-      if (add_reverse_edge) {
-        Edge reverse_edge = edge;
-        std::swap(reverse_edge.from, reverse_edge.to);
-        updated_edges.emplace_back(reverse_edge);
       }
     }
     
+    // Reassign node ids and update node_dict
+    int new_id = 0;
+    for (const auto& pair : original_node_dict_) {
+      const std::string& key = pair.first;
+      int old_id = pair.second;
+      if (updated_node_ids.count(old_id) > 0) {
+        Node& old_node = nodes_[old_id];
+        Node new_node = old_node;
+        new_node.id = new_id;
+        updated_nodes.push_back(new_node);
+        updated_node_dict[key] = new_id;
+        new_id++;
+      }
+    }
+    
+    // Update edge node ids
+    for (Edge& edge : updated_edges) {
+      // Find the corresponding keys for edge.from and edge.to in the original_node_dict_
+      std::string from_key, to_key;
+      for (const auto& pair : original_node_dict_) {
+        if (pair.second == edge.from) {
+          from_key = pair.first;
+        }
+        if (pair.second == edge.to) {
+          to_key = pair.first;
+        }
+      }
+      
+      edge.from = updated_node_dict[from_key];
+      edge.to = updated_node_dict[to_key];
+    }
+    
+    // Assign the updated data to the class members
     edges_ = std::move(updated_edges);
     nodes_ = std::move(updated_nodes);
+    node_dict_ = std::move(updated_node_dict);
   }
 }
+
 
 // Helper methods
 void Graph::reset_edges() {
@@ -165,23 +202,6 @@ void Graph::reset_nodes() {
   nodes_ = original_nodes_;
 }
 
-// Getters
-const std::vector<Graph::Edge>& Graph::edges() const {
-  return edges_;
-}
-
-const std::vector<Graph::Node>& Graph::nodes() const {
-  return nodes_;
-}
-
-const std::unordered_map<std::string, int>& Graph::node_dict() const {
-  return node_dict_;
-}
-
-std::string Graph::crs() const {
-  return crs_;
-}
-
-std::string Graph::active_profile() const {
-  return active_profile_;
+void Graph::reset_node_dict() {
+  node_dict_ = original_node_dict_;
 }
