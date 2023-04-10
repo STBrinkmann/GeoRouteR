@@ -101,7 +101,7 @@ Returns a list of edges in the graph.}
 }
 
 \subsection{Returns}{
-A list of edges with columns "from", "to", "cost", and "dist".
+A list of edges with columns "from", "to", "cost", "speed", "length", and "oneway".
 Get Nodes
 
 Returns a list of nodes in the graph.
@@ -116,7 +116,7 @@ Returns a list of nodes in the graph.
 }
 
 \subsection{Returns}{
-A list of nodes with columns "id", "x", and "y".
+A list of nodes with columns "id", "X", and "Y".
 Get Node Dictionary
 
 Returns a named list of node indices in the graph.
@@ -178,15 +178,12 @@ Activates a routing profile for the graph.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{profile}}{A character string specifying the routing profile ("default" = 0, "foot" = 1, "bicycle" = 2, "car" = 3).}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-NULL.
+\item{\code{profile}}{A character string specifying the routing profile ("default" = 0, "foot" = 1, "bicycle" = 2, "car" = 3).
 Print Graph Summary
 
-Prints a summary of the graph object, including the number of nodes and edges.
+Prints a summary of the graph object, including the number of nodes and edges.}
+}
+\if{html}{\out{</div>}}
 }
 }
 \if{html}{\out{<hr>}}

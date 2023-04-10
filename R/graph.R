@@ -65,7 +65,7 @@ Graph <- R6::R6Class("Graph",
                        #'
                        #' Returns a list of edges in the graph.
                        #'
-                       #' @return A list of edges with columns "from", "to", "cost", and "dist".
+                       #' @return A list of edges with columns "from", "to", "cost", "speed", "length", and "oneway".
                        edges = function() {
                          graph_edges(self$pointer)
                        },
@@ -74,7 +74,7 @@ Graph <- R6::R6Class("Graph",
                        #'
                        #' Returns a list of nodes in the graph.
                        #'
-                       #' @return A list of nodes with columns "id", "x", and "y".
+                       #' @return A list of nodes with columns "id", "X", and "Y".
                        nodes = function() {
                          graph_nodes(self$pointer)
                        },
@@ -87,7 +87,7 @@ Graph <- R6::R6Class("Graph",
                        node_dict = function() {
                          dict <- graph_node_dict(self$pointer)
                          nodes <- graph_nodes(self$pointer)
-                         return(dict[dict$value %in% nodes$id,])
+                         return(dict[dict$id %in% nodes$id,])
                        },
                        
                        #' Get CRS
