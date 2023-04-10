@@ -122,7 +122,6 @@ std::vector<std::vector<std::tuple<int, int, double>>> _dist_mat(const Graph& gr
         total_cost = 0.0;
         while (node != start_node) {
           int from = prev[node];
-          int to = node;
           double cost = costs[node] - costs[from];
           total_cost += cost;
           node = from;
