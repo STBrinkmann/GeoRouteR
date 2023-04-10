@@ -12,8 +12,9 @@
 #' \dontrun{
 #' edges <- data.frame(from = c("A", "A", "B", "C"),
 #'                     to = c("B", "C", "C", "D"),
-#'                     cost = c(1, 2, 3, 4),
-#'                     dist = c(1, 2, 2, 1))
+#'                     speed = c(10, 20, 40, 100),
+#'                     length = c(1, 2, 2, 1),
+#'                     oneway = c("FT", "B", "N", "TF"))
 #'
 #' nodes <- data.frame(node = c("A", "B", "C", "D"),
 #'                     X = c(0, 1, 1, 2),

@@ -23,24 +23,6 @@ graph <- Graph$new(edge_from, edge_to, edge_cost, edge_dist, node_name, node_x, 
 }
 }
 
-\examples{
-\dontrun{
-edge_from <- c("A", "A", "B", "C")
-edge_to <- c("B", "C", "C", "D")
-edge_cost <- c(1, 2, 3, 4)
-edge_dist <- c(1, 2, 2, 1)
-node_name <- c("A", "B", "C", "D")
-node_x <- c(0, 1, 1, 2)
-node_y <- c(0, 0, 1, 1)
-crs <- "EPSG:4326"
-
-graph <- Graph$new(edge_from, edge_to, edge_cost, edge_dist, node_name, node_x, node_y, crs)
-print(graph$edges())
-print(graph$nodes())
-print(graph$node_dict())
-print(graph$crs())
-}
-}
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
@@ -59,6 +41,8 @@ Creates a new Graph object.}
 \item \href{#method-Graph-nodes}{\code{Graph$nodes()}}
 \item \href{#method-Graph-node_dict}{\code{Graph$node_dict()}}
 \item \href{#method-Graph-crs}{\code{Graph$crs()}}
+\item \href{#method-Graph-profile}{\code{Graph$profile()}}
+\item \href{#method-Graph-activate_profile}{\code{Graph$activate_profile()}}
 \item \href{#method-Graph-print}{\code{Graph$print()}}
 \item \href{#method-Graph-clone}{\code{Graph$clone()}}
 }
@@ -71,8 +55,9 @@ Creates a new Graph object.}
 \if{html}{\out{<div class="r">}}\preformatted{Graph$new(
   edge_from,
   edge_to,
-  edge_cost,
-  edge_dist,
+  edge_speed,
+  edge_length,
+  edge_oneway,
   node_name,
   node_x,
   node_y,
@@ -87,9 +72,11 @@ Creates a new Graph object.}
 
 \item{\code{edge_to}}{character vector of edge targets.}
 
-\item{\code{edge_cost}}{numeric vector of edge costs.}
+\item{\code{edge_speed}}{numeric vector of edge speeds.}
 
-\item{\code{edge_dist}}{numeric vector of edge distances.}
+\item{\code{edge_length}}{numeric vector of edge lengths.}
+
+\item{\code{edge_oneway}}{character vector of edge oneway types (one-way: from-to = "FT", one-way: to-from = "TF", two-way = "B", or restricted = "N").}
 
 \item{\code{node_name}}{character vector of node names.}
 
@@ -160,6 +147,43 @@ Returns the CRS (coordinate reference system) string of the graph.
 
 \subsection{Returns}{
 A character string of the CRS.
+Get CRS
+
+Returns the active routing profile string of the graph.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Graph-profile"></a>}}
+\if{latex}{\out{\hypertarget{method-Graph-profile}{}}}
+\subsection{Method \code{profile()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Graph$profile()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+A character string of the CRS.
+Activate Routing Profile
+
+Activates a routing profile for the graph.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Graph-activate_profile"></a>}}
+\if{latex}{\out{\hypertarget{method-Graph-activate_profile}{}}}
+\subsection{Method \code{activate_profile()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Graph$activate_profile(profile = "default")}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{profile}}{A character string specifying the routing profile ("default" = 0, "foot" = 1, "bicycle" = 2, "car" = 3).}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+NULL.
 Print Graph Summary
 
 Prints a summary of the graph object, including the number of nodes and edges.
