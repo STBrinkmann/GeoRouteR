@@ -94,11 +94,11 @@ void Graph::activate_routing_profile(int profile) {
       case ROUTING_PROFILE_BICYCLE:
         active_profile_ = "bicycle";
         edge.oneway = (edge.speed > 90) ? "N" : edge.oneway;
-        edge.speed = 15;
+        edge.speed = (edge.oneway == "foot_only") ? 4 : 15; // default 15 km/h, 4 km/h when walking is required 
         break;
       case ROUTING_PROFILE_CAR:
         active_profile_ = "car";
-        // No changes needed
+        edge.oneway = (edge.oneway == "foot_only") ? "N" : edge.oneway;
         break;
       default:
         throw std::runtime_error("Invalid routing profile.");
