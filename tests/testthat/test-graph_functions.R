@@ -15,7 +15,7 @@ test_that("makegraph works", {
   
   testthat::expect_is(graph, "Graph")
   testthat::expect_equal(sort(nodes$node),
-                         sort(graph$node_dict()$key))
+                         sort(graph$node_dict()$node))
 })
 
 test_that("isochrone works", {
@@ -35,9 +35,9 @@ test_that("isochrone works", {
   
   isochrones <- isochrone(graph, from = "A", lim = 10)
   
-  testthat::expect_equal(isochrones$cost, c(0.360, 0.360, 0.396))
-  testthat::expect(all(c(isochrones$from, isochrones$to) %in% graph$node_dict()$key),
-                   failure_message = "All elements of isochrones$ref must be a subset of graph$node_dict()$key")
+  testthat::expect_equal(isochrones$cost, c(0.0060, 0.0060, 0.0066))
+  testthat::expect(all(c(isochrones$from, isochrones$to) %in% graph$node_dict()$node),
+                   failure_message = "All elements of isochrones$ref must be a subset of graph$node_dict()$node")
 })
 
 test_that("isochrone works", {
@@ -56,17 +56,17 @@ test_that("isochrone works", {
   graph <- makegraph(edges, nodes, crs, directed = TRUE)
   
   graph$activate_profile(profile = "foot")
-  testthat::expect_equal(graph$edges()$cost, c(0.72, 0.72, 1.44, 1.44, 1.44, 1.44))
+  testthat::expect_equal(graph$edges()$cost, c(0.012, 0.012, 0.024, 0.024, 0.024, 0.024))
   testthat::expect(nrow(graph$nodes()) == 3,
                    failure_message = "activate_profile(profile = \"foot\") did not clean nodes correctly")
   
   graph$activate_profile(profile = "bicycle")
-  testthat::expect_equal(graph$edges()$cost, c(0.24, 0.48, 0.48))
+  testthat::expect_equal(graph$edges()$cost, c(0.004, 0.008, 0.008))
   testthat::expect(nrow(graph$nodes()) == 3,
                    failure_message = "activate_profile(profile = \"foot\") did not clean nodes correctly")
   
   graph$activate_profile(profile = "car")
-  testthat::expect_equal(graph$edges()$cost, c(0.360, 0.360, 0.360, 0.036))
+  testthat::expect_equal(graph$edges()$cost, c(0.006, 0.006, 0.006, 0.0006))
   testthat::expect(nrow(graph$nodes()) == 4,
                    failure_message = "activate_profile(profile = \"car\") did not clean nodes correctly")
   
