@@ -2,7 +2,7 @@
 #'
 #' This function takes edge and node data.frames and a CRS string to create a Graph object.
 #'
-#' @param edges data.frame with columns "from", "to", "speed" [km/h], "length" [m], "oneway" (one-way: from-to = "FT", one-way: to-from = "TF", two-way = "B", or restricted = "N")
+#' @param edges data.frame with columns "from", "to", "speed" \[km/h\], "length" \[m\], "oneway" (one-way: from-to = "FT", one-way: to-from = "TF", two-way = "B", or restricted = "N")
 #' @param nodes data.frame with columns "node", "X", and "Y".
 #' @param crs character string representing the coordinate reference system.
 #' @param directed logical value indicating whether the graph is directed (default is TRUE).
@@ -14,8 +14,8 @@
 #' \dontrun{
 #' edges <- data.frame(from = c("A", "A", "B", "C"),
 #'                     to = c("B", "C", "C", "D"),
-#'                     speed = c(10, 20, 40, 100),
-#'                     length = c(1, 2, 2, 1),
+#'                     speed = c(10, 20, 40, 100), # km/h
+#'                     length = c(1, 2, 2, 1),     # m
 #'                     oneway = c("FT", "B", "N", "TF"))
 #'
 #' nodes <- data.frame(node = c("A", "B", "C", "D"),
