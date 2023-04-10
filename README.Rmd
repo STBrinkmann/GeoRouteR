@@ -16,7 +16,9 @@ knitr::opts_chunk$set(
 # GeoRouteR
 
 <!-- badges: start -->
+
 [![R-CMD-check](https://github.com/STBrinkmann/GeoRouteR/actions/workflows/check-standard.yaml/badge.svg)](https://github.com/STBrinkmann/GeoRouteR/actions/workflows/check-standard.yaml)
+
 <!-- badges: end -->
 
 The goal of GeoRouteR is to provide easy-to-use functions for routing and isochrone analysis on spatial data.
@@ -33,12 +35,15 @@ devtools::install_github("STBrinkmann/GeoRouteR")
 ## Example
 
 This is a basic example which shows you how to build a basic Graph:
+
 ```{r example}
 library(GeoRouteR)
 
 edges <- data.frame(from = c("A", "A", "B", "C"),
                     to = c("B", "C", "C", "D"),
-                    cost = c(1, 2, 3, 4))
+                    speed = c(10, 20, 40, 100),
+                    length = c(1, 2, 2, 1),
+                    oneway = c("FT", "B", "N", "TF"))
 
 nodes <- data.frame(node = c("A", "B", "C", "D"),
                     X = c(0, 1, 1, 2),
@@ -50,10 +55,31 @@ graph <- makegraph(edges, nodes, crs, directed = TRUE)
 graph
 ```
 
-This code creates a graph with `makegraph()`, using the edge `data.frame` for `from`, `to`, and `cost`, and spatial coordinates from the `nodes` `data.frame` containing the `node`, `X` and `Y` coordinates. The resulting `Graph` object is stored in C++ and a pointer is used for calling the relevant methods.
-We can now use use the `isochrone` function to generate isochrones.
+This code creates a graph with `makegraph()`, using the edge `data.frame` for `from`, `to`, and `cost`, and spatial coordinates from the `nodes` `data.frame` containing the `node`, `X` and `Y` coordinates. The resulting `Graph` object is stored in C++ and a pointer is used for calling the relevant methods. We can now use use the `isochrone` function to generate isochrones.
+
 ```{r}
 isochrones <- isochrone(graph, from = "A", lim = c(2, 6))
 isochrones
 ```
 
+You can also change the speed profile to foot, bicylce and car. This will adjust the edge costs and change the graph based on the oneway rules.
+
+-   "foot": sets speed to 5 km/h, ignores oneway rules and disables roads with speed \> 90 km/h
+
+-   "bicycle": sets speed to 15 km/h, disables roads with speed \> 90 km/h
+
+-   "car": speed and oneway rules are taken from user input (edges)
+
+-   "default": restores default settings
+
+```{r}
+graph$activate_profile(profile = "foot")
+graph
+```
+
+```{r}
+graph$edges()
+```
+
+\
+\

@@ -11,20 +11,21 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
 // graph_create
-RcppExport SEXP graph_create(SEXP edge_from, SEXP edge_to, SEXP edge_cost, SEXP edge_dist, SEXP node_name, SEXP node_x, SEXP node_y, SEXP crs);
-RcppExport SEXP _GeoRouteR_graph_create(SEXP edge_fromSEXP, SEXP edge_toSEXP, SEXP edge_costSEXP, SEXP edge_distSEXP, SEXP node_nameSEXP, SEXP node_xSEXP, SEXP node_ySEXP, SEXP crsSEXP) {
+RcppExport SEXP graph_create(SEXP edge_from, SEXP edge_to, SEXP edge_speed, SEXP edge_length, SEXP edge_oneway, SEXP node_name, SEXP node_x, SEXP node_y, SEXP crs);
+RcppExport SEXP _GeoRouteR_graph_create(SEXP edge_fromSEXP, SEXP edge_toSEXP, SEXP edge_speedSEXP, SEXP edge_lengthSEXP, SEXP edge_onewaySEXP, SEXP node_nameSEXP, SEXP node_xSEXP, SEXP node_ySEXP, SEXP crsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< SEXP >::type edge_from(edge_fromSEXP);
     Rcpp::traits::input_parameter< SEXP >::type edge_to(edge_toSEXP);
-    Rcpp::traits::input_parameter< SEXP >::type edge_cost(edge_costSEXP);
-    Rcpp::traits::input_parameter< SEXP >::type edge_dist(edge_distSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type edge_speed(edge_speedSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type edge_length(edge_lengthSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type edge_oneway(edge_onewaySEXP);
     Rcpp::traits::input_parameter< SEXP >::type node_name(node_nameSEXP);
     Rcpp::traits::input_parameter< SEXP >::type node_x(node_xSEXP);
     Rcpp::traits::input_parameter< SEXP >::type node_y(node_ySEXP);
     Rcpp::traits::input_parameter< SEXP >::type crs(crsSEXP);
-    rcpp_result_gen = Rcpp::wrap(graph_create(edge_from, edge_to, edge_cost, edge_dist, node_name, node_x, node_y, crs));
+    rcpp_result_gen = Rcpp::wrap(graph_create(edge_from, edge_to, edge_speed, edge_length, edge_oneway, node_name, node_x, node_y, crs));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -72,6 +73,28 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// graph_profile
+RcppExport SEXP graph_profile(SEXP p);
+RcppExport SEXP _GeoRouteR_graph_profile(SEXP pSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP >::type p(pSEXP);
+    rcpp_result_gen = Rcpp::wrap(graph_profile(p));
+    return rcpp_result_gen;
+END_RCPP
+}
+// graph_activate_routing_profile
+void graph_activate_routing_profile(SEXP p, SEXP profile);
+RcppExport SEXP _GeoRouteR_graph_activate_routing_profile(SEXP pSEXP, SEXP profileSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP >::type p(pSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type profile(profileSEXP);
+    graph_activate_routing_profile(p, profile);
+    return R_NilValue;
+END_RCPP
+}
 // calculate_isochrone
 RcppExport SEXP calculate_isochrone(SEXP graph_ptr, SEXP start_nodes_sexp, SEXP lim_sexp);
 RcppExport SEXP _GeoRouteR_calculate_isochrone(SEXP graph_ptrSEXP, SEXP start_nodes_sexpSEXP, SEXP lim_sexpSEXP) {
@@ -89,11 +112,13 @@ END_RCPP
 RcppExport SEXP _rcpp_module_boot_graph_module();
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_GeoRouteR_graph_create", (DL_FUNC) &_GeoRouteR_graph_create, 8},
+    {"_GeoRouteR_graph_create", (DL_FUNC) &_GeoRouteR_graph_create, 9},
     {"_GeoRouteR_graph_edges", (DL_FUNC) &_GeoRouteR_graph_edges, 1},
     {"_GeoRouteR_graph_nodes", (DL_FUNC) &_GeoRouteR_graph_nodes, 1},
     {"_GeoRouteR_graph_node_dict", (DL_FUNC) &_GeoRouteR_graph_node_dict, 1},
     {"_GeoRouteR_graph_crs", (DL_FUNC) &_GeoRouteR_graph_crs, 1},
+    {"_GeoRouteR_graph_profile", (DL_FUNC) &_GeoRouteR_graph_profile, 1},
+    {"_GeoRouteR_graph_activate_routing_profile", (DL_FUNC) &_GeoRouteR_graph_activate_routing_profile, 2},
     {"_GeoRouteR_calculate_isochrone", (DL_FUNC) &_GeoRouteR_calculate_isochrone, 3},
     {"_rcpp_module_boot_graph_module", (DL_FUNC) &_rcpp_module_boot_graph_module, 0},
     {NULL, NULL, 0}
