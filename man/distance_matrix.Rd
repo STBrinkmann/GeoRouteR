@@ -20,9 +20,9 @@ a data frame with three columns: "from" (the starting node), "to"
 (a node in the isochrone), and "cost" (the cost of the path from the starting node to the node)
 }
 \description{
-This function calculates the isochrone for a set of starting nodes in a directed
-graph using Dijkstra's algorithm. The isochrone is defined as the set of nodes that can be
-reached from the starting nodes within a certain cost limit.
+The algorithm finds the shortest path between pairs of nodes in a graph using
+the A* search algorithm, which combines graph traversal with heuristic estimates to efficiently
+guide the search towards the optimal solution.
 }
 \examples{
 \dontrun{
