@@ -2,7 +2,7 @@
 #'
 #' This function takes edge and node data.frames and a CRS string to create a Graph object.
 #'
-#' @param edges data.frame with columns "from", "to", "cost", and optionally "dist".
+#' @param edges data.frame with columns "from", "to", "speed" [km/h], "length" [m], "oneway" (one-way: from-to = "FT", one-way: to-from = "TF", two-way = "B", or restricted = "N")
 #' @param nodes data.frame with columns "node", "X", and "Y".
 #' @param crs character string representing the coordinate reference system.
 #' @param directed logical value indicating whether the graph is directed (default is TRUE).

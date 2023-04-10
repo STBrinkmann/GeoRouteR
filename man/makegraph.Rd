@@ -7,7 +7,7 @@
 makegraph(edges, nodes, crs, directed = TRUE)
 }
 \arguments{
-\item{edges}{data.frame with columns "from", "to", "cost", and optionally "dist".}
+\item{edges}{data.frame with columns "from", "to", "speed" \link{km/h}, "length" \link{m}, "oneway" (one-way: from-to = "FT", one-way: to-from = "TF", two-way = "B", or restricted = "N")}
 
 \item{nodes}{data.frame with columns "node", "X", and "Y".}
 
