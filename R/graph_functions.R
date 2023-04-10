@@ -2,7 +2,7 @@
 #'
 #' This function takes edge and node data.frames and a CRS string to create a Graph object.
 #'
-#' @param edges data.frame with columns "from", "to", "speed" \[km/h\], "length" \[m\], "oneway" (one-way: from-to = "FT", one-way: to-from = "TF", two-way = "B", or restricted = "N")
+#' @param edges data.frame with columns "from", "to", "speed" \[km/h\], "length" \[m\], "oneway" (one-way: from-to = "FT", one-way: to-from = "TF", two-way = "B", restricted = "N", or pedestiran only = "foot_only" (bicycle will walk))
 #' @param nodes data.frame with columns "node", "X", and "Y".
 #' @param crs character string representing the coordinate reference system.
 #' @param directed logical value indicating whether the graph is directed (default is TRUE).
@@ -42,7 +42,7 @@ makegraph <- function(edges, nodes, crs, directed = TRUE) {
   # Check if column names of edges and nodes data.frames are as expected
   checkmate::assert_named(edges, .var.name = c("from", "to", "speed", "length", "oneway"))
   checkmate::assert_named(nodes, .var.name = c("node", "X", "Y"))
-  checkmate::assert_true(all(edges$oneway %in% c("TF", "FT", "B", "N")))
+  checkmate::assert_true(all(edges$oneway %in% c("TF", "FT", "B", "N", "foot_only")))
   
   if (any(is.na(edges))) stop("NAs are not allowed in the graph")
   if (any(edges$speed < 0)) stop("Negative speed is not allowed")

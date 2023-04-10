@@ -108,6 +108,20 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// calculate_dist_mat
+RcppExport SEXP calculate_dist_mat(SEXP graph_ptr, SEXP start_nodes_sexp, SEXP end_nodes_sexp, SEXP mode_sexp);
+RcppExport SEXP _GeoRouteR_calculate_dist_mat(SEXP graph_ptrSEXP, SEXP start_nodes_sexpSEXP, SEXP end_nodes_sexpSEXP, SEXP mode_sexpSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP >::type graph_ptr(graph_ptrSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type start_nodes_sexp(start_nodes_sexpSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type end_nodes_sexp(end_nodes_sexpSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type mode_sexp(mode_sexpSEXP);
+    rcpp_result_gen = Rcpp::wrap(calculate_dist_mat(graph_ptr, start_nodes_sexp, end_nodes_sexp, mode_sexp));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 RcppExport SEXP _rcpp_module_boot_graph_module();
 
@@ -120,6 +134,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_GeoRouteR_graph_profile", (DL_FUNC) &_GeoRouteR_graph_profile, 1},
     {"_GeoRouteR_graph_activate_routing_profile", (DL_FUNC) &_GeoRouteR_graph_activate_routing_profile, 2},
     {"_GeoRouteR_calculate_isochrone", (DL_FUNC) &_GeoRouteR_calculate_isochrone, 3},
+    {"_GeoRouteR_calculate_dist_mat", (DL_FUNC) &_GeoRouteR_calculate_dist_mat, 4},
     {"_rcpp_module_boot_graph_module", (DL_FUNC) &_rcpp_module_boot_graph_module, 0},
     {NULL, NULL, 0}
 };

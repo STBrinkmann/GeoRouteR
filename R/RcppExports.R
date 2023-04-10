@@ -33,3 +33,7 @@ calculate_isochrone <- function(graph_ptr, start_nodes_sexp, lim_sexp) {
     .Call(`_GeoRouteR_calculate_isochrone`, graph_ptr, start_nodes_sexp, lim_sexp)
 }
 
+calculate_dist_mat <- function(graph_ptr, start_nodes_sexp, end_nodes_sexp, mode_sexp) {
+    .Call(`_GeoRouteR_calculate_dist_mat`, graph_ptr, start_nodes_sexp, end_nodes_sexp, mode_sexp)
+}
+

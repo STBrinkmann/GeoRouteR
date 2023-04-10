@@ -7,7 +7,7 @@
 makegraph(edges, nodes, crs, directed = TRUE)
 }
 \arguments{
-\item{edges}{data.frame with columns "from", "to", "speed" [km/h], "length" [m], "oneway" (one-way: from-to = "FT", one-way: to-from = "TF", two-way = "B", or restricted = "N")}
+\item{edges}{data.frame with columns "from", "to", "speed" [km/h], "length" [m], "oneway" (one-way: from-to = "FT", one-way: to-from = "TF", two-way = "B", restricted = "N", or pedestiran only = "foot_only" (bicycle will walk))}
 
 \item{nodes}{data.frame with columns "node", "X", and "Y".}
 

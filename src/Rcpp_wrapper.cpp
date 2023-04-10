@@ -1,6 +1,7 @@
 #include <Rcpp.h>
 #include "graph.h"
 #include "isochrone.h"
+#include "dist_mat.h"
 
 using namespace Rcpp;
 
@@ -181,5 +182,40 @@ RcppExport SEXP calculate_isochrone(SEXP graph_ptr, SEXP start_nodes_sexp, SEXP 
                            _["end"] = end,
                            _["cost"] = cost,
                            _["threshold"] = threshold);
+  END_RCPP
+}
+
+// [[Rcpp::export]]
+RcppExport SEXP calculate_dist_mat(SEXP graph_ptr, SEXP start_nodes_sexp, SEXP end_nodes_sexp, SEXP mode_sexp) {
+  BEGIN_RCPP
+  XPtr<Graph> graph(graph_ptr);
+  std::vector<int> start_nodes = Rcpp::as<std::vector<int>>(start_nodes_sexp);
+  std::vector<int> end_nodes = Rcpp::as<std::vector<int>>(end_nodes_sexp);
+  std::string mode = Rcpp::as<std::string>(mode_sexp);
+  
+  auto all_paths = parallelCalculateDistMat(*graph, start_nodes, end_nodes, mode);
+  
+  size_t total_size = 0;
+  for (const auto& paths : all_paths) {
+    total_size += paths.size();
+  }
+  
+  IntegerVector start(total_size);
+  IntegerVector end(total_size);
+  NumericVector cost(total_size);
+  
+  size_t index = 0;
+  for (const auto& paths : all_paths) {
+    for (const auto& path : paths) {
+      start[index] = std::get<0>(path);
+      end[index] = std::get<1>(path);
+      cost[index] = std::get<2>(path);
+      ++index;
+    }
+  }
+  
+  return DataFrame::create(_["start"] = start,
+                           _["end"] = end,
+                           _["cost"] = cost);
   END_RCPP
 }
