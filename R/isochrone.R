@@ -35,8 +35,8 @@ isochrone <- function(Graph, from, lim) {
   if (any(is.na(from))) stop("NAs are not allowed in origin nodes")
   
   from <- as.character(from)
-  if (sum(from %in% Graph$node_dict()$key) < length(from)) stop("Some nodes are not in the graph")
-  from_id <- Graph$node_dict()$value[match(from, Graph$node_dict()$key)]
+  if (sum(from %in% Graph$node_dict()$node) < length(from)) stop("Some nodes are not in the graph")
+  from_id <- Graph$node_dict()$id[match(from, Graph$node_dict()$node)]
   
   lim <- as.numeric(lim)
   if (any(is.na(lim))) stop("NAs are not allowed in cost value(s)")
@@ -51,8 +51,8 @@ isochrone <- function(Graph, from, lim) {
   rownames(res) <- NULL
   
   # Add ref
-  res$start <- Graph$node_dict()$key[match(res$start, Graph$node_dict()$value)]
-  res$end <- Graph$node_dict()$key[match(res$end, Graph$node_dict()$value)]
+  res$start <- Graph$node_dict()$node[match(res$start, Graph$node_dict()$id)]
+  res$end <- Graph$node_dict()$node[match(res$end, Graph$node_dict()$id)]
   
   # Reorder and rename
   res <- data.frame(from = res$start,

@@ -80,8 +80,8 @@ RcppExport SEXP graph_nodes(SEXP p) {
   }
   
   return DataFrame::create(_["id"] = id,
-                           _["x"] = x,
-                           _["y"] = y);
+                           _["X"] = x,
+                           _["Y"] = y);
   END_RCPP
 }
 
@@ -102,8 +102,8 @@ RcppExport SEXP graph_node_dict(SEXP p) {
     i++;
   }
   
-  return DataFrame::create(_["key"] = key,
-                           _["value"] = value);
+  return DataFrame::create(_["node"] = key,
+                           _["id"] = value);
   END_RCPP
 }
 
