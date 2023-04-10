@@ -67,14 +67,18 @@ isochrones
 #> 3    A  D 0.396         2
 ```
 
-You can also change the speed profile to foot, bicylce and car.
+You can also change the speed profile to foot, bicylce and car. This
+will adjust the edge costs and change the graph based on the oneway
+rules.
 
-- foot: sets speed to 5 km/h, ignores oneway rules and disables roads
+- “foot”: sets speed to 5 km/h, ignores oneway rules and disables roads
   with speed \> 90 km/h
 
-- bicycle: sets speed to 15 km/h, disables roads with speed \> 90 km/h
+- “bicycle”: sets speed to 15 km/h, disables roads with speed \> 90 km/h
 
-- car: speed and oneway rules are taken from user input (edges)
+- “car”: speed and oneway rules are taken from user input (edges)
+
+- “default”: restores default settings
 
 ``` r
 graph$activate_profile(profile = "foot")
