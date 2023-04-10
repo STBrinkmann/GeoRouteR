@@ -7,23 +7,24 @@ using namespace Rcpp;
 // Declare Rcpp pointer class
 RCPP_EXPOSED_CLASS_NODECL(Graph)
   
-  // Graph class constructor wrapper
-  // [[Rcpp::export]]
-  RcppExport SEXP graph_create(SEXP edge_from, SEXP edge_to, SEXP edge_cost, SEXP edge_dist, SEXP node_name, SEXP node_x, SEXP node_y, SEXP crs) {
+// Graph class constructor wrapper
+// [[Rcpp::export]]
+RcppExport SEXP graph_create(SEXP edge_from, SEXP edge_to, SEXP edge_speed, SEXP edge_length, SEXP edge_oneway, SEXP node_name, SEXP node_x, SEXP node_y, SEXP crs) {
     BEGIN_RCPP
-    CharacterVector edge_from_str(edge_from), edge_to_str(edge_to), node_name_str(node_name);
-    NumericVector edge_cost_num(edge_cost), edge_dist_num(edge_dist), node_x_num(node_x), node_y_num(node_y);
+    CharacterVector edge_from_str(edge_from), edge_to_str(edge_to), node_name_str(node_name), edge_oneway_str(edge_oneway);
+    NumericVector edge_speed_num(edge_speed), edge_length_num(edge_length), node_x_num(node_x), node_y_num(node_y);
     std::string crs_str = as<std::string>(crs);
     
     std::vector<std::string> edge_from_std(edge_from_str.begin(), edge_from_str.end());
     std::vector<std::string> edge_to_std(edge_to_str.begin(), edge_to_str.end());
-    std::vector<double> edge_cost_std(edge_cost_num.begin(), edge_cost_num.end());
-    std::vector<double> edge_dist_std(edge_dist_num.begin(), edge_dist_num.end());
+    std::vector<double> edge_speed_std(edge_speed_num.begin(), edge_speed_num.end());
+    std::vector<double> edge_length_std(edge_length_num.begin(), edge_length_num.end());
     std::vector<std::string> node_name_std(node_name_str.begin(), node_name_str.end());
+    std::vector<std::string> edge_oneway_std(edge_oneway_str.begin(), edge_oneway_str.end());
     std::vector<double> node_x_std(node_x_num.begin(), node_x_num.end());
     std::vector<double> node_y_std(node_y_num.begin(), node_y_num.end());
     
-    XPtr<Graph> ptr(new Graph(edge_from_std, edge_to_std, edge_cost_std, edge_dist_std, node_name_std, node_x_std, node_y_std, crs_str));
+    XPtr<Graph> ptr(new Graph(edge_from_std, edge_to_std, edge_speed_std, edge_length_std, edge_oneway_std, node_name_std, node_x_std, node_y_std, crs_str));
     return ptr;
     END_RCPP
   }
@@ -39,19 +40,25 @@ RcppExport SEXP graph_edges(SEXP p) {
   IntegerVector from(n);
   IntegerVector to(n);
   NumericVector cost(n);
-  NumericVector dist(n);
+  NumericVector speed(n);
+  NumericVector length(n);
+  CharacterVector oneway(n);
   
   for (size_t i = 0; i < n; ++i) {
     from[i] = edges[i].from;
     to[i] = edges[i].to;
     cost[i] = edges[i].cost;
-    dist[i] = edges[i].dist;
+    speed[i] = edges[i].speed;
+    length[i] = edges[i].length;
+    oneway[i] = edges[i].oneway;
   }
   
   return DataFrame::create(_["from"] = from,
                            _["to"] = to,
                            _["cost"] = cost,
-                           _["dist"] = dist);
+                           _["speed"] = speed,
+                           _["length"] = length,
+                           _["oneway"] = oneway);
   END_RCPP
 }
 
@@ -108,14 +115,35 @@ RcppExport SEXP graph_crs(SEXP p) {
   END_RCPP
 }
 
+// [[Rcpp::export]]
+RcppExport SEXP graph_profile(SEXP p) {
+  BEGIN_RCPP
+  XPtr<Graph> ptr(p);
+  return wrap(ptr->active_profile());
+  END_RCPP
+}
+
+// Methods
+// [[Rcpp::export]]
+void graph_activate_routing_profile(SEXP p, SEXP profile) {
+  BEGIN_RCPP
+  XPtr<Graph> ptr(p);
+  int routing_profile = as<int>(profile);
+  ptr->activate_routing_profile(routing_profile);
+  VOID_END_RCPP
+}
 
 RCPP_MODULE(graph_module) {
   using namespace Rcpp;
+  // Getters
   function("graph_create", &graph_create);
   function("graph_edges", &graph_edges);
   function("graph_nodes", &graph_nodes);
   function("graph_node_dict", &graph_node_dict);
   function("graph_crs", &graph_crs);
+  function("graph_profile", &graph_profile);
+  //Methods
+  function("graph_activate_routing_profile", &graph_activate_routing_profile);
 }
 
 // Methods
