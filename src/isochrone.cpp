@@ -81,6 +81,8 @@ std::vector<std::tuple<int, int, double, double>> _calculateIsochrone(const Grap
   }
   
   for (auto start : start_nodes) {
+    result.push_back(std::make_tuple(start, start, 0.0, *std::min_element(lim.begin(), lim.end())));
+    
     std::vector<double> costs(node_count, std::numeric_limits<double>::max());
     costs[start] = 0.0;
     
