@@ -67,7 +67,7 @@ test_that("isochrone works", {
   
   isochrones <- isochrone(graph, from = "A", lim = 10)
   
-  testthat::expect_equal(isochrones$cost, c(0.0060, 0.0060, 0.0066))
+  testthat::expect_equal(isochrones$cost, c(0, 0.0060, 0.0060, 0.0066))
   testthat::expect(all(c(isochrones$from, isochrones$to) %in% graph$node_dict()$node),
                    failure_message = "All elements of isochrones must be a subset of graph$node_dict()$node")
 })
