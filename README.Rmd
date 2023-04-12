@@ -41,13 +41,13 @@ This is a basic example which shows you how to build a basic S6 Graph object:
 ```{r example}
 library(GeoRouteR)
 
-edges <- data.frame(from = c("A", "A", "B", "C", "A"),
-                    to = c("B", "C", "C", "D", "E"),
+edges <- data.frame(from = c("A", "A", "C", "B", "A"),
+                    to = c("B", "C", "D", "C", "E"),
                     speed = c(10, 20, 40, 100, 20),
                     length = c(1, 2, 2, 1, 3),
                     oneway = c("FT", "B", "N", "TF", "foot_only"))
 
-nodes <- data.frame(node = c("A", "B", "C", "D", "E"),
+nodes <- data.frame(node = c("A", "B", "D", "C", "E"),
                     X = c(0, 1, 1, 2, 3),
                     Y = c(0, 0, 1, 1, 2))
 

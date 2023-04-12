@@ -32,13 +32,13 @@ object:
 ``` r
 library(GeoRouteR)
 
-edges <- data.frame(from = c("A", "A", "B", "C", "A"),
-                    to = c("B", "C", "C", "D", "E"),
+edges <- data.frame(from = c("A", "A", "C", "B", "A"),
+                    to = c("B", "C", "D", "C", "E"),
                     speed = c(10, 20, 40, 100, 20),
                     length = c(1, 2, 2, 1, 3),
                     oneway = c("FT", "B", "N", "TF", "foot_only"))
 
-nodes <- data.frame(node = c("A", "B", "C", "D", "E"),
+nodes <- data.frame(node = c("A", "B", "D", "C", "E"),
                     X = c(0, 1, 1, 2, 3),
                     Y = c(0, 0, 1, 1, 2))
 
@@ -85,7 +85,7 @@ graph$activate_profile(profile = "foot")
 graph
 #> Graph summary:
 #> -----------------
-#> Number of nodes: 4 
+#> Number of nodes: 5 
 #> Number of edges: 8 
 #> CRS: EPSG:4326 
 #> Active profile: foot
@@ -94,14 +94,14 @@ graph
 ``` r
 graph$edges()
 #>   from to  cost speed length oneway
-#> 1    0  2 0.012     5      1      B
-#> 2    2  0 0.012     5      1      B
-#> 3    0  1 0.024     5      2      B
-#> 4    1  0 0.024     5      2      B
-#> 5    2  1 0.024     5      2      B
-#> 6    1  2 0.024     5      2      B
-#> 7    0  3 0.036     5      3      B
-#> 8    3  0 0.036     5      3      B
+#> 1    0  1 0.012     5      1      B
+#> 2    1  0 0.012     5      1      B
+#> 3    0  3 0.024     5      2      B
+#> 4    3  0 0.024     5      2      B
+#> 5    3  2 0.024     5      2      B
+#> 6    2  3 0.024     5      2      B
+#> 7    0  4 0.036     5      3      B
+#> 8    4  0 0.036     5      3      B
 ```
 
 ### Calculate isochrones and distance matrix
@@ -113,8 +113,9 @@ the “foot” active.
 isochrones <- isochrone(graph, from = "A", lim = c(0.02, 0.03))
 isochrones
 #>   from to  cost threshold
-#> 1    A  B 0.012      0.02
-#> 2    A  C 0.024      0.03
+#> 1    A  A 0.000      0.02
+#> 2    A  B 0.012      0.02
+#> 3    A  C 0.024      0.03
 ```
 
 We can also use the `distance_matrix` function to calculate the the
@@ -130,10 +131,10 @@ dist_mat
 #> 2     A  C 0.024
 #> 3     A  E 0.036
 #> 4     B  A 0.012
-#> 5     B  C 0.024
+#> 5     B  C 0.036
 #> 6     B  E 0.048
 #> 7     C  A 0.024
-#> 8     C  B 0.024
+#> 8     C  B 0.036
 #> 9     C  E 0.060
 #> 10    E  A 0.036
 #> 11    E  B 0.048

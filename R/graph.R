@@ -114,7 +114,7 @@ Graph <- R6::R6Class("Graph",
                        #' @param profile A character string specifying the routing profile ("default" = 0, "foot" = 1, "bicycle" = 2, "car" = 3).
                        activate_profile = function(profile = "default") {
                          checkmate::assert_choice(profile, c("default", "foot", "bicycle", "car"))
-                         
+
                          mapping <- c("default" = 0, "foot" = 1, "bicycle" = 2, "car" = 3)
                          graph_activate_routing_profile(self$pointer, as.integer(mapping[profile]))
                        },

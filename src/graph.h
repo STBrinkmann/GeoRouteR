@@ -2,8 +2,8 @@
 #define GRAPH_H
 
 #include <vector>
-#include <unordered_map>
 #include <string>
+#include <map>
 
 class Graph {
 public:
@@ -42,7 +42,7 @@ public:
   // Getters
   const std::vector<Edge>& edges() const;
   const std::vector<Node>& nodes() const;
-  const std::unordered_map<std::string, int>& node_dict() const;
+  const std::map<int, std::string>& node_dict() const;
   std::string crs() const;
   std::string active_profile() const;
   
@@ -55,8 +55,8 @@ private:
   std::vector<Edge> original_edges_;
   std::vector<Node> nodes_;
   std::vector<Node> original_nodes_;
-  std::unordered_map<std::string, int> original_node_dict_;
-  std::unordered_map<std::string, int> node_dict_;
+  std::map<int, std::string> original_node_dict_;
+  std::map<int, std::string> node_dict_;
   std::string crs_;
   std::string active_profile_;
   

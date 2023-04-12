@@ -93,8 +93,8 @@ RcppExport SEXP graph_node_dict(SEXP p) {
   const auto& node_dict = ptr->node_dict();
   
   size_t n = node_dict.size();
-  CharacterVector key(n);
-  IntegerVector value(n);
+  IntegerVector key(n);
+  CharacterVector value(n);
   
   size_t i = 0;
   for (const auto& kv : node_dict) {
@@ -103,8 +103,8 @@ RcppExport SEXP graph_node_dict(SEXP p) {
     i++;
   }
   
-  return DataFrame::create(_["node"] = key,
-                           _["id"] = value);
+  return DataFrame::create(_["node"] = value,
+                           _["id"] = key);
   END_RCPP
 }
 
